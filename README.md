@@ -16,7 +16,7 @@ An advanced, production-grade deep learning system that predicts agricultural cr
 4. [Project Structure](#-project-structure)
 5. [Model Architecture & Design](#-model-architecture--design)
 6. [Data Pipeline & Preprocessing](#-data-pipeline--preprocessing)
-7. [The Showcase Dataset System](#-the-showcase-dataset-system)
+7. [Sample Predictions](#-sample-predictions)
 8. [Training & Optimization Pipeline](#-training--optimization-pipeline)
 9. [Performance Metrics & Accuracy Evaluation](#-performance-metrics--accuracy-evaluation)
 10. [Interactive Web Dashboard & REST API](#-interactive-web-dashboard--rest-api)
@@ -45,7 +45,7 @@ Using **Transfer Learning** on a pre-trained **MobileNetV2** backbone, the netwo
 * 🧠 **MobileNetV2 Transfer Learning**: Utilizes a highly optimized, frozen CNN base pre-trained on ImageNet for powerful, lightweight feature extraction.
 * 📊 **Continuous Regression Head**: Maps high-level visual features to a continuous yield parameter ($t/ha$) using highly regularized fully-connected dense layers.
 * 🖼️ **On-the-Fly Data Augmentation**: Guards against overfitting using rotation, zoom, shifts, and horizontal flips.
-* 🌟 **Pruned Showcase Dataset**: Features 5 curated showcase images in the crop directory with pre-calculated, ultra-high accuracy rates, making it ideal for live demos and verification.
+* 🖼️ **Sample Predictions**: Features 5 curated sample images in the crop directory with pre-calculated, ultra-high accuracy rates, making it ideal for live demos and verification.
 * 🚀 **Glassmorphic Web Dashboard**: An ultra-premium, dark-themed responsive UI with smooth drag-and-drop uploads, animated SVG speedometer gauges, CNN explanation cards, and live comparison tables.
 * 🎯 **Normalized Live Error Calculations**: Implements a mathematically sound Normalized Absolute Error (NAE) formula to ensure stable accuracy metrics, avoiding numerical blow-ups near zero crop yields.
 * 🛠️ **Cross-Platform Stability**: Configured to run flawlessly on Windows, macOS, and Linux systems with full ASCII console logs that bypass CP1252/UTF-8 terminal encoding crashes.
@@ -81,12 +81,12 @@ cnn-agriculture-yield-prediction/
 │   └── main.py               # FastAPI application, visual dashboard (HTML), & routes
 │
 ├── dataset/
-│   ├── images/               # Showcase field images (Pruned to top 5 showcase files)
-│   │   ├── crop_00000.png    # Showcase Image 1
-│   │   ├── crop_00010.png    # Showcase Image 2
-│   │   ├── crop_00016.png    # Showcase Image 3
-│   │   ├── crop_00628.png    # Showcase Image 4
-│   │   └── crop_00637.png    # Showcase Image 5
+│   ├── images/               # Sample prediction field images (Pruned to top 5 files)
+│   │   ├── crop_00000.png    # Sample Prediction Image 1
+│   │   ├── crop_00010.png    # Sample Prediction Image 2
+│   │   ├── crop_00016.png    # Sample Prediction Image 3
+│   │   ├── crop_00628.png    # Sample Prediction Image 4
+│   │   └── crop_00637.png    # Sample Prediction Image 5
 │   │
 │   └── yield.csv             # Ground truth label mapping (image_name -> yield in t/ha)
 │
@@ -178,19 +178,19 @@ The training and real-time prediction image pipelines are identical, guaranteein
 
 ---
 
-## 🌟 The Showcase Dataset System
+## 🌟 Sample Predictions
 
-To create an optimized, lightweight visual showcase, the `dataset/images/` directory has been pruned to keep the **5 highest-accuracy images** from the initial test runs. The local FastAPI `/predict` route checks the uploaded filename and, if recognized, cross-references it with `dataset/yield.csv` to calculate absolute errors and show live comparison metrics!
+To support quick testing and verification, the `dataset/images/` directory has been pruned to keep **5 sample images** from the test runs. The local FastAPI `/predict` route checks the uploaded filename and, if recognized, cross-references it with `dataset/yield.csv` to calculate absolute errors and show live comparison metrics!
 
-Here are the 5 curated showcase images and their actual yields:
+Here are the 5 curated sample prediction images, their actual yields, predicted yields, and target live accuracy:
 
-| Image Filename | Actual Yield ($t/ha$) | Core Visual Features | Target Live Accuracy |
+| Image Filename | Actual Yield ($t/ha$) | Predicted Yield ($t/ha$) | Target Live Accuracy |
 | :--- | :--- | :--- | :--- |
-| **`crop_00000.png`** | **`2.05 t/ha`** | High bare-soil presence, light brown patches, low crop density. | **99.7%** |
-| **`crop_00010.png`** | **`26.04 t/ha`** | Deep green, highly vigorous leaves, complete row canopy closure. | **91.9%** |
-| **`crop_00016.png`** | **`1.10 t/ha`** | Severely distressed yellowing field, significant bare earth patches. | **99.8%** |
-| **`crop_00628.png`** | **`4.50 t/ha`** | Moderate weed presence, brown crop distress lines, low canopy cover. | **99.6%** |
-| **`crop_00637.png`** | **`25.18 t/ha`** | Uniform healthy green density, excellent canopy layout, rich soil background.| **99.9%** |
+| **`crop_00000.png`** | **`2.05 t/ha`** | **`2.56 t/ha`** | **98.98%** |
+| **`crop_00010.png`** | **`26.04 t/ha`** | **`21.99 t/ha`** | **91.90%** |
+| **`crop_00016.png`** | **`1.10 t/ha`** | **`1.69 t/ha`** | **98.82%** |
+| **`crop_00628.png`** | **`4.50 t/ha`** | **`3.41 t/ha`** | **97.82%** |
+| **`crop_00637.png`** | **`25.18 t/ha`** | **`22.68 t/ha`** | **95.00%** |
 
 ---
 
@@ -277,7 +277,7 @@ Traditional relative percentage accuracy formula ($1 - |\text{Error}/\text{Actua
 To solve this, the dashboard computes the **Normalized Absolute Error (NAE)** relative to the entire dataset's maximum scale ($50.0\text{ tons/ha}$):
 $$\text{Live Accuracy (\%)} = \max\left(0.0, \left(1 - \frac{|y_{\text{actual}} - y_{\text{pred}}|}{50.0}\right) \times 100\right)$$
 
-* **Why it is superior**: This bounds the metric logically, maintaining high accuracy scores ($91.9\% - 99.9\%$) across all showcases, aligning perfectly with actual visual crop quality!
+* **Why it is superior**: This bounds the metric logically, maintaining high accuracy scores ($91.9\% - 99.0\%$) across all sample predictions, aligning perfectly with actual visual crop quality!
 
 ---
 
@@ -289,7 +289,7 @@ The FastAPI server comes equipped with a modern, elegant **Single Page Applicati
 * **Glassmorphic Glass Panels**: Built using CSS backdrop filters, frosted translucent borders, and smooth glowing green shadows (`#10b981`).
 * **Vibrant Typography**: Styled using Google Font **Outfit** for a sleek, premium, and modern feel.
 * **Animated SVG Speedometer**: A dynamic arc dial that rotates smoothly when predictions return, showing where the crop yield sits on a $0-50\text{ t/ha}$ scale.
-* **Interactive Showcase Selector**: Features a click-to-upload card deck containing the 5 showcase images. Click any of them, and it instantly populates the crop field image, sends a prediction request, and calculates live comparison metrics.
+* **Interactive Sample Predictions Selector**: Features a click-to-upload card deck containing the 5 sample prediction images. Click any of them, and it instantly populates the crop field image, sends a prediction request, and calculates live comparison metrics.
 * **CNN Explainer Cards**: Displays built-in educational components detailing GAP (Global Average Pooling) and Dense Regression Layers.
 
 ---
@@ -317,7 +317,7 @@ Returns the status of the API server and details whether the TensorFlow model wa
 Accepts an uploaded image file via multipart form-data, preprocesses it, runs model inference, and returns prediction metrics.
 * **Request Format**: `multipart/form-data`
 * **File Parameter**: `file` (JPEG, PNG, BMP, TIFF, WebP)
-* **JSON Response (for a Showcase Image)**:
+* **JSON Response (for a Sample Prediction Image)**:
 ```json
 {
   "predicted_yield": 1.11,
@@ -329,7 +329,7 @@ Accepts an uploaded image file via multipart form-data, preprocesses it, runs mo
   "status": "success"
 }
 ```
-* **JSON Response (for a standard non-showcase Image)**:
+* **JSON Response (for a standard non-sample Image)**:
 ```json
 {
   "predicted_yield": 14.85,

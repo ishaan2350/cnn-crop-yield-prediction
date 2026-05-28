@@ -1,14 +1,14 @@
 """
-predict.py - Standalone Offline Prediction Utility & Sample Predictions Runner
+sample_predictions.py - Standalone Offline Prediction Utility & Sample Predictions Runner
 =============================================================================
 
-This script runs sample predictions on the 5 showcase crop images located in
+This script runs sample predictions on the 5 sample crop images located in
 `dataset/images/` using the trained CNN model. It displays a beautiful offline
 evaluation table comparing Actual Yields vs. Predicted Yields, including
 absolute errors and live accuracy ratings.
 
 Usage:
-    python predict.py
+    python sample_predictions.py
 """
 
 import os
@@ -91,8 +91,8 @@ def main():
         except Exception as e:
             print(f"[Warning] Failed to parse yield.csv: {e}")
 
-    # List of 5 pruned showcase images
-    showcase_files = [
+    # List of 5 pruned sample images
+    sample_files = [
         "crop_00000.png",
         "crop_00010.png",
         "crop_00016.png",
@@ -100,18 +100,18 @@ def main():
         "crop_00637.png"
     ]
 
-    # Verify showcase images directory
+    # Verify sample images directory
     if not os.path.exists(IMAGES_DIR):
-        print(f"[Error] Showcase images directory not found at '{IMAGES_DIR}'.")
+        print(f"[Error] Sample images directory not found at '{IMAGES_DIR}'.")
         return
 
     results = []
 
-    # Run predictions on each showcase image
-    for filename in showcase_files:
+    # Run predictions on each sample image
+    for filename in sample_files:
         img_path = os.path.join(IMAGES_DIR, filename)
         if not os.path.exists(img_path):
-            print(f"[Warning] Showcase file '{filename}' is missing from '{IMAGES_DIR}'.")
+            print(f"[Warning] Sample file '{filename}' is missing from '{IMAGES_DIR}'.")
             continue
 
         try:
