@@ -136,10 +136,21 @@ def main():
                 abs_error = "N/A"
                 accuracy = "N/A"
                 
+            # Derive confidence and status like the FastAPI server does
+            if predicted_yield > 5.0:
+                confidence = "high"
+            elif predicted_yield > 2.0:
+                confidence = "medium"
+            else:
+                confidence = "low"
+            status = "Success"
+                
             results.append({
                 "Image Filename": filename,
                 "Actual Yield": f"{actual_yield:.2f} t/ha" if actual_yield is not None else "N/A",
                 "Predicted Yield": f"{predicted_yield:.2f} t/ha",
+                "Status": status,
+                "Confidence": confidence,
                 "Abs Error": f"{abs_error:.2f} t/ha" if isinstance(abs_error, float) else "N/A",
                 "Accuracy": f"{accuracy:.2f}%" if isinstance(accuracy, float) else "N/A"
             })
@@ -152,12 +163,12 @@ def main():
         print("[Error] No sample predictions were completed successfully.")
         return
 
-    print("+" + "-" * 73 + "+")
-    print(f"| {'Image Filename':<16} | {'Actual Yield':<12} | {'Predicted Yield':<15} | {'Abs Error':<10} | {'Accuracy':<8} |")
-    print("+" + "-" * 73 + "+")
+    print("+" + "-" * 96 + "+")
+    print(f"| {'Image Filename':<16} | {'Actual Yield':<12} | {'Predicted Yield':<15} | {'Status':<8} | {'Confidence':<10} | {'Abs Error':<10} | {'Accuracy':<8} |")
+    print("+" + "-" * 96 + "+")
     for r in results:
-        print(f"| {r['Image Filename']:<16} | {r['Actual Yield']:<12} | {r['Predicted Yield']:<15} | {r['Abs Error']:<10} | {r['Accuracy']:<8} |")
-    print("+" + "-" * 73 + "+")
+        print(f"| {r['Image Filename']:<16} | {r['Actual Yield']:<12} | {r['Predicted Yield']:<15} | {r['Status']:<8} | {r['Confidence']:<10} | {r['Abs Error']:<10} | {r['Accuracy']:<8} |")
+    print("+" + "-" * 96 + "+")
     print("\n[SUCCESS] Sample predictions runner finished successfully!")
     print("To test live requests, start the API: python -m uvicorn api.main:app")
     print("=" * 75)

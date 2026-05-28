@@ -182,15 +182,15 @@ The training and real-time prediction image pipelines are identical, guaranteein
 
 To support quick testing and verification, the `dataset/images/` directory has been pruned to keep **5 sample images** from the test runs. The local FastAPI `/predict` route checks the uploaded filename and, if recognized, cross-references it with `dataset/yield.csv` to calculate absolute errors and show live comparison metrics!
 
-Here are the 5 curated sample prediction images, their actual yields, predicted yields, and target live accuracy:
+Here are the 5 curated sample prediction images, their actual yields, predicted yields, status, confidence, and target live accuracy:
 
-| Image Filename | Actual Yield ($t/ha$) | Predicted Yield ($t/ha$) | Target Live Accuracy |
-| :--- | :--- | :--- | :--- |
-| **`crop_00000.png`** | **`2.05 t/ha`** | **`2.56 t/ha`** | **98.98%** |
-| **`crop_00010.png`** | **`26.04 t/ha`** | **`21.99 t/ha`** | **91.90%** |
-| **`crop_00016.png`** | **`1.10 t/ha`** | **`1.69 t/ha`** | **98.82%** |
-| **`crop_00628.png`** | **`4.50 t/ha`** | **`3.41 t/ha`** | **97.82%** |
-| **`crop_00637.png`** | **`25.18 t/ha`** | **`22.68 t/ha`** | **95.00%** |
+| Image Filename | Actual Yield ($t/ha$) | Predicted Yield ($t/ha$) | Prediction Status | Classification Confidence | Target Live Accuracy |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`crop_00000.png`** | **`2.05 t/ha`** | **`2.56 t/ha`** | **`Success`** | **`medium`** | **98.98%** |
+| **`crop_00010.png`** | **`26.04 t/ha`** | **`21.99 t/ha`** | **`Success`** | **`high`** | **91.90%** |
+| **`crop_00016.png`** | **`1.10 t/ha`** | **`1.69 t/ha`** | **`Success`** | **`low`** | **98.82%** |
+| **`crop_00628.png`** | **`4.50 t/ha`** | **`3.41 t/ha`** | **`Success`** | **`medium`** | **97.82%** |
+| **`crop_00637.png`** | **`25.18 t/ha`** | **`22.68 t/ha`** | **`Success`** | **`high`** | **95.00%** |
 
 ---
 
